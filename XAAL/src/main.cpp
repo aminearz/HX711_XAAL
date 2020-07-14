@@ -24,8 +24,8 @@ ChaChaPoly chacha;
 
 #include <HX711.h>
 
-const int LOADCELL_DOUT_PIN = 13;
-const int LOADCELL_SCK_PIN = 12;
+const int LOADCELL_DOUT_PIN = 5;
+const int LOADCELL_SCK_PIN = 2;
 
 HX711 scale;
 float calibration_factor = 2400 ; // Defines calibration factor we'll use for calibrating.
@@ -128,7 +128,7 @@ void HX711Init() {
 void sendAlive() {
   xAALPayload.clear();
   xAALPayload["header"]["source"] = UUID;
-  xAALPayload["header"]["devType"] = "HX711.basic";
+  xAALPayload["header"]["devType"] = "Balance.basic";
   xAALPayload["header"]["msgType"] = "notify";
   xAALPayload["header"]["action"] = "alive";
   xAALPayload["body"]["timeout"] = 600;
@@ -137,7 +137,7 @@ void sendAlive() {
 void sendDescription() {
   xAALPayload.clear();
   xAALPayload["header"]["source"] = UUID;
-  xAALPayload["header"]["devType"] = "HX711.basic";
+  xAALPayload["header"]["devType"] = "Balance.basic";
   xAALPayload["header"]["msgType"] = "reply";
   xAALPayload["header"]["action"] = "getDescription";
   xAALPayload["body"]["vendorId"] = "Arduino";
@@ -150,15 +150,15 @@ void sendStatus() {
   scale.set_scale(calibration_factor);  // Adjusts the calibration factor.
   scale.wait_ready();
   Serial.print("Reading: ");            // Prints weight readings in .2 decimal kg units.
-  Serial.print(scale.get_units(), 4);
+  Serial.print(scale.get_units(), 2);
   Serial.println(" kg");
 
   xAALPayload.clear();
   xAALPayload["header"]["source"] = UUID;
-  xAALPayload["header"]["devType"] = "HX711.basic";
+  xAALPayload["header"]["devType"] = "Balance.basic";
   xAALPayload["header"]["msgType"] = "notify";
   xAALPayload["header"]["action"] = "attributesChange";
-  xAALPayload["body"]["HX711"] = scale.get_units();
+  xAALPayload["body"]["Weight"] = scale.get_units();
   xAALSend();
 
 
