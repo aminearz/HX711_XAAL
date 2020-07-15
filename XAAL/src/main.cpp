@@ -169,7 +169,7 @@ void sendStatus() {
 
 void setup()
 {
-  Serial.begin(115200);   // Starts serial communication in 9600 baud rate.
+  Serial.begin(115200);   // Starts serial communication in 115200 baud rate.
   HX711Init();
   wifiInit();
   ntpInit();
